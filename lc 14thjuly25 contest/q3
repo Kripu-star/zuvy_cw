@@ -1,0 +1,34 @@
+class Solution {
+    public char processStr(String s, long k) {
+        int n = s.length();
+        long len =0;
+   // Finding the  length of the resulting string  without creating it
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (c >= 'a' && c <= 'z') len++;
+            else if (c == '*') {
+                if (len > 0) len--;
+            } else if (c == '#') {
+                len *= 2;
+            }
+        }
+     if (k >= len) return '.'; // Out of bounds
+      long pos = k; // Track the target index through reverse operations
+     // Backtrack through operations to find the character at pos
+        for (int i = n - 1; i >= 0; i--) {
+            char c = s.charAt(i);
+            if (c == '#') {
+                len = len/2;;
+                pos %= len;
+            } else if (c == '%') {
+                pos = len - 1 - pos;
+            } else if (c == '*') {
+                len++;
+            } else if (c >= 'a' && c <= 'z') {
+                len--;
+                if (pos == len) return c;
+            }
+        }
+       return '.';
+    }
+}
